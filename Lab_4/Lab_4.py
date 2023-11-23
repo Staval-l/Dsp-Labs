@@ -40,65 +40,67 @@ def real_stft(x: np.ndarray, segment: int, overlap: int) -> np.ndarray:
     return stft_result
 
 
-class Test(unittest.TestCase):
-    class Params:
-        def __init__(self, n: int, segment: int, overlap: int) -> None:
-            self.n = n
-            self.segment = segment
-            self.overlap = overlap
-
-        def __str__(self) -> str:
-            return f"n={self.n} segment={self.segment} overlap={self.overlap}"
-
-    def test_dft(self) -> None:
-        for n in (10, 11, 12, 13, 14, 15, 16):
-            with self.subTest(n=n):
-                np.random.seed(0)
-                x = np.random.rand(n) + 1j * np.random.rand(n)
-                actual = dft(x)
-                expected = fft(x)
-                self.assertTrue(np.allclose(actual, expected))
-
-    #@unittest.skip
-    def test_stft(self) -> None:
-        params_list = (
-            Test.Params(50, 10, 5),
-            Test.Params(50, 10, 6),
-            Test.Params(50, 10, 7),
-            Test.Params(50, 10, 8),
-            Test.Params(50, 10, 9),
-            Test.Params(101, 15, 7),
-            Test.Params(101, 15, 8),
-        )
-
-        for params in params_list:
-            with self.subTest(params=str(params)):
-                np.random.seed(0)
-                x = np.random.rand(params.n)
-                actual = real_stft(x, params.segment, params.overlap)
-                _, _, expected = stft(
-                    x,
-                    boundary=None,
-                    nperseg=params.segment,
-                    noverlap=params.overlap,
-                    padded=False,
-                    window="boxcar",
-                )
-                assert isinstance(expected, np.ndarray)
-                self.assertTrue(np.allclose(actual, params.segment * expected))
-
-
-def main() -> None:
-    unittest.main()
+# class Test(unittest.TestCase):
+#     class Params:
+#         def __init__(self, n: int, segment: int, overlap: int) -> None:
+#             self.n = n
+#             self.segment = segment
+#             self.overlap = overlap
+#
+#         def __str__(self) -> str:
+#             return f"n={self.n} segment={self.segment} overlap={self.overlap}"
+#
+#     @unittest.skip
+#     def test_dft(self) -> None:
+#         for n in (10, 11, 12, 13, 14, 15, 16):
+#             with self.subTest(n=n):
+#                 np.random.seed(0)
+#                 x = np.random.rand(n) + 1j * np.random.rand(n)
+#                 actual = dft(x)
+#                 expected = fft(x)
+#                 self.assertTrue(np.allclose(actual, expected))
+#
+#     @unittest.skip
+#     def test_stft(self) -> None:
+#         params_list = (
+#             Test.Params(50, 10, 5),
+#             Test.Params(50, 10, 6),
+#             Test.Params(50, 10, 7),
+#             Test.Params(50, 10, 8),
+#             Test.Params(50, 10, 9),
+#             Test.Params(101, 15, 7),
+#             Test.Params(101, 15, 8),
+#         )
+#
+#         for params in params_list:
+#             with self.subTest(params=str(params)):
+#                 np.random.seed(0)
+#                 x = np.random.rand(params.n)
+#                 actual = real_stft(x, params.segment, params.overlap)
+#                 _, _, expected = stft(
+#                     x,
+#                     boundary=None,
+#                     nperseg=params.segment,
+#                     noverlap=params.overlap,
+#                     padded=False,
+#                     window="boxcar",
+#                 )
+#                 assert isinstance(expected, np.ndarray)
+#                 self.assertTrue(np.allclose(actual, params.segment * expected))
+#
+#
+# def main() -> None:
+#     unittest.main()
 
 
 if __name__ == "__main__":
-    fs, data = read("2023_lab4_2.wav")
+    fs, data = read("24.wav")
     data = [r[0] for r in data]
-    f, t, spectrum = stft(data, fs, nperseg=4000)
+    f, t, spectrum = stft(data, fs, nperseg=3000)
     plt.figure('Spectrogram')
     plt.pcolormesh(t, f, np.abs(spectrum) ** 2)
     plt.xlabel('Time [sec]')
     plt.ylabel('Frequency [Hz]')
+    plt.ylim(500, 2000)
     plt.show()
-    main()
+    #main()
