@@ -1,0 +1,22 @@
+[tool.isort]
+profile = "black"
+
+[tool.mypy-scipy]
+ignore_missing_imports = true
+
+[tool.pylint.messages_control]
+disable = [
+    "bare-except",
+    "broad-exception-caught",
+    "broad-exception-raised",
+    "line-too-long",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "no-name-in-module",
+    "too-few-public-methods",
+    "too-many-arguments",
+]
+
+[tool.pylint.basic]
+good-names = ["fs"]
